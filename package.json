@@ -1,0 +1,30 @@
+{
+  "name": "api-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "db-create-migration": "npx knex migrate:make --knexfile ./src/db/knexfile.js",
+    "db-create-seed": "npx knex seed:make --knexfile ./src/db/knexfile.js",
+    "db-seed": "npx knex seed:run --knexfile ./src/db/knexfile.js",
+    "db-migrate": "npx knex migrate:latest --knexfile ./src/db/knexfile.js",
+    "db-rollback": "npx knex migrate:rollback --knexfile ./src/db/knexfile.js",
+    "db-down": "npx knex migrate:down --knexfile ./src/db/knexfile.js",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "knex": "^0.95.14",
+    "mysql2": "^2.3.3",
+    "objection": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
