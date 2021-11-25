@@ -25,7 +25,7 @@ pipeline {
                 echo 'Building ...'
                 container('docker') {
                     script {
-                        imagen_my_app = docker.build("${docker_hub_user}/my-app:${BUILD_NUMBER}")
+                        imagen_my_app = docker.build("${docker_hub_user}/my_app:${BUILD_NUMBER}")
                         docker.withRegistry('', docker_hub_ingreso) { 
                             if (env.BRANCH_NAME == 'main') {
                                 imagen_my_app.push('latest')
