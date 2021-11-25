@@ -23,7 +23,7 @@ metadata:
 type: Opaque
 data:
   MYSQL_USER: cm9vdA== # root
-  MYSQL_PASSWORD: dXN1YXJpbw== # usuario
+  MYSQL_PASSWORD: MTIzNA== # 1234
   MYSQL_DB: cGVsaWN1bGFzX0RC # peliculas_DB
 ---
 apiVersion: v1
