@@ -7,7 +7,7 @@ pipeline {
 	    kubernetes_token = credentials('k8s-token')
 	    docker_hub_ingreso = credentials('docker_hub_id')
 	    docker_hub_user = 'gondragon'
-	    user_DB = credentials('user_DB') // usuario     -> para el manifiest usar encode64= dXN1YXJpbw==
+	    user_DB = credentials('user_DB') // root     -> para el manifiest usar encode64= cm9vdA==
 	    pass_DB = credentials('user_pass_DB') // usuario ->para el manifiest usar encode64= dXN1YXJpbw==
 	    port_DB = credentials('port_DB') // 3606
 	    name_DB = credentials('name_BD') // peliculas_DB ->para el manifiest usar encode64= cGVsaWN1bGFzX0RC
