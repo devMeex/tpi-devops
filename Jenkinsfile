@@ -66,13 +66,11 @@ pipeline {
                         if (env.BRANCH_NAME == 'main') {
                             sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f manifest_main.yaml'
 							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/my-app-deployment  -n my-app-main'
-							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/my-app-deployment  -n my-app-main'
                         }
                         if (env.BRANCH_NAME == 'dev') {
                             sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f manifest_dev.yaml'
 							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/my-app-deployment  -n my-app-dev'
-							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/my-app-deployment  -n my-app-dev'
-                        }
+			            }
                         
                     }
                 }
