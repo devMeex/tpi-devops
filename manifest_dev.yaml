@@ -144,7 +144,7 @@ spec:
           imagePullPolicy: Always
           name: my-app-deployment
           ports:
-            - containerPort: 8000
+            - containerPort: 3000
               protocol: TCP
           env:
             - name: SQL_HOST
