@@ -40,23 +40,6 @@ pipeline {
             }
         }
 
-	         
-		stage('DB-migration') {  // ver que container puede servir para realizar la migracion , aca usa uno que se llama dotnet
-            steps {
-                echo 'Updating DB...'
-                container('dotnet') {
-				
-                    script {
-						if (env.BRANCH_NAME == 'main') {
-							sh 'cd ./my-app && dotnet ef migrations list && DB_HOST=${db_host_prod} DB_PORT=${port_DB} MYSQL_USER=${user_DB} MYSQL_PASSWORD=${pass_DB} MYSQL_DB=${name_DB} dotnet ef database update'
-						}
-                        if (env.BRANCH_NAME == 'dev') {
-							sh 'cd ./my-app && dotnet ef migrations list && DB_HOST=${db_host_dev} DB_PORT=${port_DB} MYSQL_USER=${user_DB} MYSQL_PASSWORD=${pass_DB} MYSQL_DB=${name_DB} dotnet ef database update'
-                        }
-                    }
-                }
-            }
-        }
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
