@@ -24,7 +24,7 @@ type: Opaque
 data:
   MYSQL_USER: cm9vdA== # root
   MYSQL_PASSWORD: MTIzNA== # 1234
-  MYSQL_DB: cGVsaWN1bGFzX0RC # peliculas_DB
+  MYSQL_DB: ZGItZGV2b3Bz # db-devops
 ---
 apiVersion: v1
 kind: PersistentVolume
