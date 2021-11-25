@@ -5,7 +5,7 @@ pipeline {
         // definir todo en la parte de credenciales de jenkins por medio de secret_text o user_and_password
 	    kubernetes_server = "https://10.0.2.10:6443"
 	    kubernetes_token = credentials('k8s-token')
-	    docker_hub_ingreso = credentials('docker_hub_id')
+	    docker_hub_ingreso = 'docker_hub_id'
 	    docker_hub_user = 'gondragon'
 	    user_DB = credentials('user_DB') // root     -> para el manifiest usar encode64= cm9vdA==
 	    pass_DB = credentials('user_pass_DB') // 1234 ->para el manifiest usar encode64= MTIzNA==
