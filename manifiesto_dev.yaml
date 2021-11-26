@@ -9,7 +9,7 @@ metadata:
   namespace: my-app-dev
   name: endpoints
 data:
-  DB_HOST: '10.88.0.105'
+  DB_HOST: '10.96.0.5'
   DB_PORT: '3306'
   HOST_ENV: 'dev'
 ---
@@ -97,7 +97,7 @@ spec:
     - port: 3306
   selector:
     app: mysql
-  clusterIP: 10.88.0.105
+  clusterIP: 10.96.0.5
 ---
 apiVersion: v1
 kind: Service
@@ -110,27 +110,27 @@ spec:
       port: 80
       targetPort: 3000
   selector:
-    app: my_app
+    app: back-api
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: my-app-dev
-  name: my_app
+  name: back-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: my_app
+      app: back-api
   template:
     metadata:
       labels:
-        app: my_app
+        app: back-api
     spec:
       containers:
         - image: gondragon/my_app:dev
           imagePullPolicy: Always
-          name: my_app
+          name: back-api
           env:
             - name: DB_HOST
               valueFrom:
@@ -164,4 +164,4 @@ spec:
                   key: HOST_ENV
           ports:
             - containerPort: 3000
-              name: my_app
+              name: back-api
