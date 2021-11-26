@@ -9,9 +9,9 @@ metadata:
   namespace: my-app-dev
   name: endpoints
 data:
-  DB_HOST: '10.96.0.5'
-  DB_PORT: '3306'
-  HOST_ENV: 'dev'
+  DB_HOST: "10.96.0.5"
+  DB_PORT: "3306"
+  HOST_ENV: "dev"
 ---
 apiVersion: v1
 kind: Secret
@@ -163,6 +163,5 @@ spec:
                   name: endpoints
                   key: HOST_ENV
           ports:
-            - containerPort: 3000
-              name: back-api
-              protocol: TCP
+          - name: http
+          - containerPort: 3000                      
