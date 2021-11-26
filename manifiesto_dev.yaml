@@ -168,3 +168,4 @@ spec:
           ports:
             - containerPort: 3000
               name: back-api
+              protocol: TCP
