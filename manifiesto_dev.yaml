@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app-dev
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: my-app-dev
+  name: endpoints
+data:
+  DB_HOST: '10.88.0.105'
+  DB_PORT: '3306'
+  HOST_ENV: 'dev'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: my-app-dev
+type: Opaque
+data:
+  MYSQL_USER: cm9vdA==
+  MYSQL_PASSWORD: MTIzNA==
+  MYSQL_DB: ZGItZGV2b3Bz
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-app-dev
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysql
+          env:
+            - name: MYSQL_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_DB
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql/data
+              subPath: mysql
+      volumes:
+        - name: mysql-persistent-storage
+          hostPath:
+            path: /home/devops/mysql-dev
+            type: Directory
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: my-app-dev
+  name: my-app-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /tpi/dev
+            pathType: Prefix
+            backend:
+              service:
+                name: my-app-service-back
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: my-app-dev
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  clusterIP: 10.88.0.105
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: my-app-dev
+  name: my-app-service-back
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: my_app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-app-dev
+  name: my_app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my_app
+  template:
+    metadata:
+      labels:
+        app: my_app
+    spec:
+      containers:
+        - image: gondragon/my_app:dev
+          imagePullPolicy: Always
+          name: my_app
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: DB_PORT
+            - name: MYSQL_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_DB
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: HOST_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: HOST_ENV
+          ports:
+            - containerPort: 3000
+              name: my_app
