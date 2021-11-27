@@ -1,14 +1,16 @@
 // Update with your config settings.
-const {knexSnakeCaseMappers} = require('objection');
+const { knexSnakeCaseMappers } = require('objection');
 
 module.exports = {
-  
+
   development: {
     client: 'mysql2',
     connection: {
-      database: 'db-devops',
-      user:'root',
-      password:'1234'
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD
     },
     pool: {
       min: 2,
@@ -17,7 +19,7 @@ module.exports = {
     migrations: {
       tableName: 'knex_migrations'
     },
-    seeds:{
+    seeds: {
       directory: './seeds'
     },
     ...knexSnakeCaseMappers,
@@ -37,7 +39,7 @@ module.exports = {
     migrations: {
       tableName: 'knex_migrations'
     }
-  } */
+  }  */
 
 
 };
