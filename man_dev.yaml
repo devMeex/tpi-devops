@@ -50,21 +50,26 @@ spec:
         - image: mysql
           name: mysql
           env:
-            - name: MYSQL_DB
+            - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_DB
-            - name: MYSQL_ROOT_USER
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_ROOT_USER
+                  key: MYSQL_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
                   key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_ROOT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_ROOT_HOST
           ports:
             - containerPort: 3306
               name: mysql
@@ -85,9 +90,10 @@ metadata:
   namespace: my-app-dev
 type: Opaque
 data:
-  MYSQL_DB: ZGItZGV2b3Bz
-  MYSQL_ROOT_USER: cm9vdA==
-  MYSQL_ROOT_PASSWORD: MTIzNA==
+  MYSQL_DATABASE: ZGJfZGV2b3Bz  # db_devops
+  MYSQL_USER: cm9vdA==          # root
+  MYSQL_ROOT_PASSWORD: MTIzNA== # 1234
+  MYSQL_ROOT_HOST: JQ==         # %
 ---
 apiVersion: v1
 kind: Service
@@ -132,21 +138,26 @@ spec:
                 configMapKeyRef:
                   name: endpoints
                   key: DB_PORT
-            - name: MYSQL_DB
+            - name: DB_NAME
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_DB
-            - name: MYSQL_ROOT_USER
+                  key: MYSQL_DATABASE
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_ROOT_USER
-            - name: MYSQL_ROOT_PASSWORD
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
                   key: MYSQL_ROOT_PASSWORD
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: NODE_ENV
             - name: HOST_ENV
               valueFrom:
                 configMapKeyRef:
@@ -164,4 +175,5 @@ metadata:
 data:
   DB_HOST: "10.96.0.5"
   DB_PORT: "3306"
+  NODE_ENV: "dev"
   HOST_ENV: "dev"

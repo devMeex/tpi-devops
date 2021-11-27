@@ -3,7 +3,7 @@ const { knexSnakeCaseMappers } = require('objection');
 
 module.exports = {
 
-  development: {
+  dev: {
     client: 'mysql2',
     connection: {
       host: process.env.DB_HOST,
@@ -17,7 +17,7 @@ module.exports = {
       max: 10
     },
     migrations: {
-      tableName: 'knex_migrations'
+      directory: './migrations'
     },
     seeds: {
       directory: './seeds'
@@ -25,21 +25,27 @@ module.exports = {
     ...knexSnakeCaseMappers,
   },
 
-  /* production: {
+  main: {
     client: 'mysql2',
     connection: {
-      database: 'db-devops',
-      user:     'root',
-      password: '1234'
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD
     },
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
-  }  */
+      directory: './migrations'
+    },
+    seeds: {
+      directory: './seeds'
+    },
+    ...knexSnakeCaseMappers,
+  }
 
 
 };
