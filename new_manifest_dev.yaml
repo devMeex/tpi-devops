@@ -1,7 +1,13 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app-dev
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: mysql
+  namespace: my-app-dev
   labels:
     app: devops
 spec:
@@ -16,6 +22,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
+  namespace: my-app-dev
   labels:
     app: devops
 spec:
@@ -29,6 +36,7 @@ apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   name: devops-mysql
+  namespace: my-app-dev
   labels:
     app: devops
 spec:
@@ -49,7 +57,7 @@ spec:
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "1234"
+          value: 1234
         ports:
         - containerPort: 3306
           name: mysql
@@ -64,7 +72,8 @@ spec:
 kind: ConfigMap 
 apiVersion: v1 
 metadata:
-  name: configmap 
+  name: configmap
+  namespace: my-app-dev
 data:
   dbhost: "10.96.0.5"
   dbname: "devops_dev"
@@ -73,6 +82,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gke-test
+  namespace: my-app-dev
 spec:
   replicas: 1
   selector:
@@ -126,6 +136,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: secret
+  namespace: my-app-dev
 type: Opaque
 data:
   dbuser: cm9vdA==
@@ -135,6 +146,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gke-test-service
+  namespace: my-app-dev
 spec:
   type: LoadBalancer
   ports:
