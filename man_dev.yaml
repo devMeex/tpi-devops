@@ -30,7 +30,7 @@ spec:
     - port: 3306
   selector:
     app: mysql
-  clusterIP: 10.96.0.101
+  clusterIP: 10.96.0.5
 ---
 apiVersion: apps/v1
 kind: Deployment
