@@ -55,11 +55,6 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: MYSQL_DATABASE
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: MYSQL_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -91,7 +86,6 @@ metadata:
 type: Opaque
 data:
   MYSQL_DATABASE: ZGJfZGV2b3Bz  # db_devops
-  MYSQL_USER: cm9vdA==          # root
   MYSQL_ROOT_PASSWORD: MTIzNA== # 1234
   MYSQL_ROOT_HOST: JQ==         # %
 ---
