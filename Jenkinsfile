@@ -51,7 +51,7 @@ pipeline {
                         }
                         if (env.BRANCH_NAME == 'dev') {
                             sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f new_manifest_dev.yaml'
-							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/gke-test'
+							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/gke-test -n my-app-dev'
 			            }
                         
                     }
