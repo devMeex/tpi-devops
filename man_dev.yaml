@@ -55,11 +55,11 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: MYSQL_DB
-            - name: MYSQL_USER
+            - name: MYSQL_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_USER
+                  key: MYSQL_ROOT_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -86,7 +86,7 @@ metadata:
 type: Opaque
 data:
   MYSQL_DB: ZGItZGV2b3Bz
-  MYSQL_USER: cm9vdA==
+  MYSQL_ROOT_USER: cm9vdA==
   MYSQL_ROOT_PASSWORD: MTIzNA==
 ---
 apiVersion: v1
@@ -137,11 +137,11 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: MYSQL_DB
-            - name: MYSQL_USER
+            - name: MYSQL_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: MYSQL_USER
+                  key: MYSQL_ROOT_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
