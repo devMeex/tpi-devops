@@ -1,0 +1,49 @@
+version: "3.3"
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3306:3306"
+    command:
+      [
+        "--bind-address=0.0.0.0",
+        "--default-authentication-plugin=mysql_native_password",
+        "--sql_mode="
+      ]
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=sesame"
+      - "MYSQL_USER=root"
+      - "MYSQL_DATABASE=db_devops"
+      - "MYSQL_ROOT_HOST=%"
+    networks:
+      - webnet
+
+  server:
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - "PORT=3000"
+      - "DB_HOST=db"
+      - "DB_PORT=3306"
+      - "DB_USER=root"
+      - "DB_PASSWORD=sesame"
+      - "DB_NAME=db_devops"
+    networks:
+      - webnet
+
+volumes:
+  db_data: {}
+
+networks:
+  webnet:
+    driver: bridge
