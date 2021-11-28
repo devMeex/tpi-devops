@@ -45,8 +45,7 @@ pipeline {
                         if (env.BRANCH_NAME == 'dev') {
                             sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f man_dev.yaml'
 							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/back-api -n my-app-dev'
-                            sh 'kubectl port-forward service/back-api-peliculas -n my-app-dev 8082:80'
-			            }
+                        }
                         
                     }
                 }
