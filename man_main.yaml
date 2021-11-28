@@ -1,0 +1,174 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app-main
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: my-app-main
+  name: ingress-webapp
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /prod
+            pathType: Prefix
+            backend:
+              service:
+                name: back-api-peliculas
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: my-app-main
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  clusterIP: 10.96.0.6
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-app-main
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql
+          name: mysql
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_DATABASE
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_ROOT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_ROOT_HOST
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+              subPath: mysql
+      volumes:
+        - name: mysql-persistent-storage
+          hostPath:
+            path: /home/devops/mysql-dev
+            type: Directory
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+  namespace: my-app-main
+type: Opaque
+data:
+  MYSQL_DATABASE: ZGJfZGV2b3Bz  # db_devops
+  MYSQL_USER: cm9vdA==          # root
+  MYSQL_ROOT_PASSWORD: MTIzNA== # 1234
+  MYSQL_ROOT_HOST: JQ==         # %
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: my-app-main
+  name: back-api-peliculas
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: back-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-app-main
+  name: back-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: back-api
+  template:
+    metadata:
+      labels:
+        app: back-api
+    spec:
+      containers:
+        - image: gondragon/my_app:latest
+          imagePullPolicy: Always
+          name: back-api
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_DATABASE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: MYSQL_ROOT_PASSWORD
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: NODE_ENV
+            - name: HOST_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: endpoints
+                  key: HOST_ENV
+          ports:
+            - containerPort: 3000
+              name: back-api
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: my-app-main
+  name: endpoints
+data:
+  DB_HOST: "10.96.0.6"
+  DB_PORT: "3306"
+  NODE_ENV: "dev"
+  HOST_ENV: "dev"
