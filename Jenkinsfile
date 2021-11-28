@@ -38,7 +38,7 @@ pipeline {
                 container('kubectl') {
                     script {
                         if (env.BRANCH_NAME == 'main') {
-                            sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f manifest_main.yaml'
+                            sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify apply -f man_main.yaml'
 							sh 'kubectl --server=${kubernetes_server} --token=${kubernetes_token} --insecure-skip-tls-verify rollout restart deployment/back-api  -n my-app-main'
                         }
                         if (env.BRANCH_NAME == 'dev') {
