@@ -7,7 +7,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: my-app-dev
-  name: ingress-webapp
+  name: ingress-api
 spec:
   rules:
     - http:
