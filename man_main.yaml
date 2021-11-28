@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: mysql-persistent-storage
           hostPath:
-            path: /home/devops/mysql-dev
+            path: /home/devops/mysql-main
             type: Directory
 ---
 apiVersion: v1
@@ -170,5 +170,5 @@ metadata:
 data:
   DB_HOST: "10.96.0.6"
   DB_PORT: "3306"
-  NODE_ENV: "dev"
-  HOST_ENV: "dev"
+  NODE_ENV: "main"
+  HOST_ENV: "main"
