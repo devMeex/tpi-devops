@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: mysql-persistent-storage
           hostPath:
-            path: /home/devops/mysql-main
+            path: /home/devops/main
             type: Directory
 ---
 apiVersion: v1
