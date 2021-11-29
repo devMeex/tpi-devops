@@ -47,7 +47,7 @@ spec:
         app: mysql
     spec:
       containers:
-        - image: mysql
+        - image: mysql:5.6
           name: mysql
           env:
             - name: MYSQL_DATABASE
@@ -73,22 +73,10 @@ spec:
               mountPath: /var/lib/mysql
               subPath: mysql
       volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pv-claim
-  labels:
-    app: back-api
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+        - name: mysql-persistent-storage
+          hostPath:
+            path: /home/devops/mysql-main
+            type: Directory
 ---
 apiVersion: v1
 kind: Secret
