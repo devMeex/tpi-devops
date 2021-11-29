@@ -25,8 +25,18 @@ const addMovie = async (req, res, next) => {
     res.status(500).json(error);
   }
 };
-
+const welcome = async (req, res) => {
+  const teams = [
+    { name: "Benitez, Gonzalo" },
+    { name: "Isla, León" },
+    { name: "Pinilla, Cristhian" },
+  ];
+  res.render("pages/index", {
+     teams
+  });
+}
 module.exports = {
   getMovies,
   addMovie,
+  welcome
 };
